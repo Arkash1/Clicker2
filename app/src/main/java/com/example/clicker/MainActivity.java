@@ -1,6 +1,7 @@
 package com.example.clicker;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,7 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     private int counter = 0;
+    private boolean isBackground1 = true;
     private TextView counterText;
+    private ImageView backgroundImage;
+    private Button buttonIncrease, buttonDecrease, buttonChangeBackground;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -21,14 +25,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Найдем элементы
         counterText = findViewById(R.id.counterText);
-        Button buttonIncrease = findViewById(R.id.buttonIncrease);
-        Button buttonDecrease = findViewById(R.id.buttonDecrease);
-        ImageView backgroundImage = findViewById(R.id.backgroundImage);
+        backgroundImage = findViewById(R.id.backgroundImage);
+        buttonIncrease = findViewById(R.id.buttonIncrease);
+        buttonDecrease = findViewById(R.id.buttonDecrease);
+        buttonChangeBackground = findViewById(R.id.buttonChangeBackground);
 
-        // Загрузка сохраненного значения счётчика
+        // Загружаем состояние фона
         sharedPreferences = getSharedPreferences("CounterApp", MODE_PRIVATE);
-        counter = sharedPreferences.getInt("counter_value", 0);
+        isBackground1 = sharedPreferences.getBoolean("background_state", true);
         updateCounter();
+        updateBackground();
 
         // Обработчики кнопок
         buttonIncrease.setOnClickListener(v -> {
@@ -40,15 +46,45 @@ public class MainActivity extends AppCompatActivity {
             counter--;
             updateCounter();
         });
+
+        buttonChangeBackground.setOnClickListener(v -> {
+            isBackground1 = !isBackground1;
+            updateBackground();
+        });
     }
 
-    // Метод обновления счётчика на экране
+    // Обновление счётчика на экране
     private void updateCounter() {
         counterText.setText("Счёт: " + counter);
+    }
 
-        // Сохранение значения в SharedPreferences
+    // Смена фона + цветов кнопок и текста
+    private void updateBackground() {
+        if (isBackground1) {
+            backgroundImage.setImageResource(R.drawable.background1);
+            updateButtonColors(Color.parseColor("#FF6200EE"), Color.WHITE);
+        } else {
+            backgroundImage.setImageResource(R.drawable.background2);
+            updateButtonColors(Color.parseColor("#FF03DAC5"), Color.BLACK);
+        }
+
+        // Сохраняем фон
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("counter_value", counter);
+        editor.putBoolean("background_state", isBackground1);
         editor.apply();
+    }
+
+    // Метод смены цветов кнопок
+    private void updateButtonColors(int buttonColor, int textColor) {
+        buttonIncrease.setBackgroundColor(buttonColor);
+        buttonIncrease.setTextColor(textColor);
+
+        buttonDecrease.setBackgroundColor(buttonColor);
+        buttonDecrease.setTextColor(textColor);
+
+        buttonChangeBackground.setBackgroundColor(buttonColor);
+        buttonChangeBackground.setTextColor(textColor);
+
+        counterText.setTextColor(textColor);
     }
 }

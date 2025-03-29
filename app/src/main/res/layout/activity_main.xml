@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/background" />
+        android:src="@drawable/background1" />
 
     <!-- Текст для отображения счёта -->
     <TextView
@@ -40,6 +40,16 @@
         android:layout_height="wrap_content"
         android:text="Уменьшить"
         android:layout_below="@id/buttonIncrease"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <!-- Кнопка смены фона -->
+    <Button
+        android:id="@+id/buttonChangeBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сменить фон"
+        android:layout_below="@id/buttonDecrease"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
 
